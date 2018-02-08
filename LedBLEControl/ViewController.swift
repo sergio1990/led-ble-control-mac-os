@@ -93,5 +93,13 @@ extension ViewController : CBCentralManagerDelegate {
     
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
         self.writeLogEntry(message: "Failed to connect with \(peripheral)! Error is \(String(describing: error))")
+        self.canStartConnect = true
+        self.seekingForBoard = false
+    }
+    
+    func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
+        self.writeLogEntry(message: "Peripheral \(peripheral) has been disconnected! Possible reason is \(String(describing: error))")
+        self.canStartConnect = true
+        self.seekingForBoard = false
     }
 }
