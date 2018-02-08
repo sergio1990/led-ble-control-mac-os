@@ -9,10 +9,14 @@
 import Cocoa
 import CoreBluetooth
 
+let targetServiceUUID = CBUUID(string: "FFE0")
+let targetCharacteristicUUID = CBUUID(string: "FFE1")
+
 class ViewController: NSViewController {
     fileprivate var centralManager: CBCentralManager?
     @IBOutlet var logsTextView: NSTextView!
     @objc dynamic var canStartConnect: Bool = false
+    @objc dynamic var seekingForBoard: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,6 +47,13 @@ class ViewController: NSViewController {
             self.logsTextView.string = newString
         }
     }
+    
+    @IBAction func onConnectToBoardClicked(_ sender: Any) {
+        self.canStartConnect = false
+        self.seekingForBoard = true
+        centralManager?.scanForPeripherals(withServices: [targetServiceUUID], options: nil)
+        self.writeLogEntry(message: "Started to seek for a target board...")
+    }
 }
 
 extension ViewController : CBCentralManagerDelegate {
@@ -50,31 +61,37 @@ extension ViewController : CBCentralManagerDelegate {
         switch (central.state) {
         case .poweredOff:
             self.writeLogEntry(message: "BLE discovering is powered off!")
-            //            self.clearDevices()
-            
+            break
         case .unauthorized:
             self.writeLogEntry(message: "BLE discovering is unauthorized!")
-            // Indicate to user that the iOS device does not support BLE.
             break
-            
         case .unknown:
             self.writeLogEntry(message: "BLE discovering is unknown!")
-            // Wait for another event
             break
-            
         case .poweredOn:
             self.writeLogEntry(message: "BLE discovering is powered on!")
             self.canStartConnect = true
-//            self.canScanning = true
-//            self.delegate?.canStartDiscover()
-            
+            break
         case .resetting:
             self.writeLogEntry(message: "BLE discovering is resetting!")
-            //            self.clearDevices()
-            
+            break
         case .unsupported:
             self.writeLogEntry(message: "BLE discovering is unsupported!")
             break
         }
+    }
+    
+    func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
+        self.writeLogEntry(message: "The needed target board has been discovered!")
+        self.writeLogEntry(message: "Does an attempt to connect to it...")
+        centralManager?.connect(peripheral, options: nil)
+    }
+    
+    func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
+        self.writeLogEntry(message: "BLE board has been properly connected!")
+    }
+    
+    func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
+        self.writeLogEntry(message: "Failed to connect with \(peripheral)! Error is \(String(describing: error))")
     }
 }

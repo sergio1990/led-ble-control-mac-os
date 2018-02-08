@@ -123,6 +123,7 @@
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <connections>
+                                    <action selector="onConnectToBoardClicked:" target="XfG-lQ-9wD" id="ywt-yg-fAh"/>
                                     <binding destination="XfG-lQ-9wD" name="enabled" keyPath="self.canStartConnect" id="nn7-eP-ety"/>
                                 </connections>
                             </button>
@@ -189,6 +190,18 @@
                                     </subviews>
                                 </view>
                             </box>
+                            <progressIndicator hidden="YES" wantsLayer="YES" fixedFrame="YES" maxValue="100" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="qhh-UD-Tux">
+                                <rect key="frame" x="3" y="231" width="16" height="16"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <connections>
+                                    <binding destination="XfG-lQ-9wD" name="animate" keyPath="self.seekingForBoard" id="uP2-iV-wny"/>
+                                    <binding destination="XfG-lQ-9wD" name="hidden" keyPath="self.seekingForBoard" id="qb3-AX-Vda">
+                                        <dictionary key="options">
+                                            <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                        </dictionary>
+                                    </binding>
+                                </connections>
+                            </progressIndicator>
                         </subviews>
                     </view>
                     <connections>
