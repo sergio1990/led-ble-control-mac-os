@@ -14,6 +14,7 @@ let targetCharacteristicUUID = CBUUID(string: "FFE1")
 
 class ViewController: NSViewController {
     fileprivate var centralManager: CBCentralManager?
+    fileprivate var targetCharacteristic: CBCharacteristic?
     @IBOutlet var logsTextView: NSTextView!
     @objc dynamic var canStartConnect: Bool = false
     @objc dynamic var seekingForBoard: Bool = false
@@ -83,12 +84,16 @@ extension ViewController : CBCentralManagerDelegate {
     
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
         self.writeLogEntry(message: "The needed target board has been discovered!")
-        self.writeLogEntry(message: "Does an attempt to connect to it...")
+        self.writeLogEntry(message: "Doing an attempt to connect to it...")
+        centralManager?.stopScan()
         centralManager?.connect(peripheral, options: nil)
     }
     
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         self.writeLogEntry(message: "BLE board has been properly connected!")
+        self.writeLogEntry(message: "Doing an attempt to discover peripheral's services...")
+        peripheral.delegate = self
+        peripheral.discoverServices([targetServiceUUID])
     }
     
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
@@ -100,6 +105,31 @@ extension ViewController : CBCentralManagerDelegate {
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
         self.writeLogEntry(message: "Peripheral \(peripheral) has been disconnected! Possible reason is \(String(describing: error))")
         self.canStartConnect = true
+        self.seekingForBoard = false
+    }
+}
+
+extension ViewController : CBPeripheralDelegate {
+    func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
+        self.writeLogEntry(message: "The services for \(peripheral) have been discovered!")
+        for service in peripheral.services! {
+            if (service.uuid == targetServiceUUID) {
+                self.writeLogEntry(message: "The target service has been found in the discovered list!")
+                self.writeLogEntry(message: "Doing an attempt to discover service's characteristics...")
+                peripheral.discoverCharacteristics([targetCharacteristicUUID], for: service)
+            }
+        }
+    }
+    
+    func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
+        self.writeLogEntry(message: "The characteristics for \(peripheral) have been discovered!")
+        for characteristic in service.characteristics! {
+            if (characteristic.uuid == targetCharacteristicUUID) {
+                self.writeLogEntry(message: "The target characteristic has been found in the discovered list!")
+                self.writeLogEntry(message: "The preparation process has been completed! You are ready to control the board!")
+                self.targetCharacteristic = characteristic
+            }
+        }
         self.seekingForBoard = false
     }
 }
