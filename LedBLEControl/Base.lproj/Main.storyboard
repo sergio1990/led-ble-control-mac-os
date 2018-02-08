@@ -188,6 +188,9 @@
                             </box>
                         </subviews>
                     </view>
+                    <connections>
+                        <outlet property="logsTextView" destination="v9H-Vo-jPo" id="nQG-hm-KRY"/>
+                    </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
