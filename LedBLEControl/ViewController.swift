@@ -12,6 +12,7 @@ import CoreBluetooth
 class ViewController: NSViewController {
     fileprivate var centralManager: CBCentralManager?
     @IBOutlet var logsTextView: NSTextView!
+    @objc dynamic var canStartConnect: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,8 +33,13 @@ class ViewController: NSViewController {
     
     func writeLogEntry(message: String) {
         DispatchQueue.main.async {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateStyle = .long
+            dateFormatter.timeStyle = .medium
+            let dateString = dateFormatter.string(from: Date() as Date)
             let oldString = self.logsTextView.string
-            let newString = oldString + message
+            let timestampedMessage = "[\(dateString)] \(message)"
+            let newString = oldString + timestampedMessage + "\n"
             self.logsTextView.string = newString
         }
     }
@@ -58,6 +64,7 @@ extension ViewController : CBCentralManagerDelegate {
             
         case .poweredOn:
             self.writeLogEntry(message: "BLE discovering is powered on!")
+            self.canStartConnect = true
 //            self.canScanning = true
 //            self.delegate?.canStartDiscover()
             

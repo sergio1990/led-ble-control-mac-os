@@ -122,6 +122,9 @@
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
+                                <connections>
+                                    <binding destination="XfG-lQ-9wD" name="enabled" keyPath="self.canStartConnect" id="nn7-eP-ety"/>
+                                </connections>
                             </button>
                             <box fixedFrame="YES" title="LED control" translatesAutoresizingMaskIntoConstraints="NO" id="Vnf-Oa-b2y">
                                 <rect key="frame" x="17" y="95" width="122" height="114"/>
@@ -163,7 +166,7 @@
                                                 <rect key="frame" x="1" y="1" width="276" height="200"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <textView ambiguous="YES" importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" dashSubstitution="YES" spellingCorrection="YES" smartInsertDelete="YES" id="v9H-Vo-jPo">
+                                                    <textView ambiguous="YES" editable="NO" importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" dashSubstitution="YES" spellingCorrection="YES" smartInsertDelete="YES" id="v9H-Vo-jPo">
                                                         <rect key="frame" x="0.0" y="0.0" width="276" height="200"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -193,6 +196,7 @@
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+                <userDefaultsController representsSharedInstance="YES" id="bb8-Kl-4ba"/>
             </objects>
             <point key="canvasLocation" x="75" y="655"/>
         </scene>
