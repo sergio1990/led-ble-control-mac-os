@@ -15,9 +15,11 @@ let targetCharacteristicUUID = CBUUID(string: "FFE1")
 class ViewController: NSViewController {
     fileprivate var centralManager: CBCentralManager?
     fileprivate var targetCharacteristic: CBCharacteristic?
+    fileprivate var targetPeripheral: CBPeripheral?
     @IBOutlet var logsTextView: NSTextView!
     @objc dynamic var canStartConnect: Bool = false
     @objc dynamic var seekingForBoard: Bool = false
+    @objc dynamic var canControlLED: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,6 +56,16 @@ class ViewController: NSViewController {
         self.seekingForBoard = true
         centralManager?.scanForPeripherals(withServices: [targetServiceUUID], options: nil)
         self.writeLogEntry(message: "Started to seek for a target board...")
+    }
+    
+    @IBAction func onLEDOnClicked(_ sender: Any) {
+        self.writeLogEntry(message: "LED on command is sent!")
+        self.targetPeripheral?.writeValue(Data.init(bytes: [1]), for: self.targetCharacteristic!, type: CBCharacteristicWriteType.withoutResponse)
+    }
+    
+    @IBAction func onLEDOffClicked(_ sender: Any) {
+        self.writeLogEntry(message: "LED off command is sent!")
+        self.targetPeripheral?.writeValue(Data.init(bytes: [0]), for: self.targetCharacteristic!, type: CBCharacteristicWriteType.withoutResponse)
     }
 }
 
@@ -92,6 +104,7 @@ extension ViewController : CBCentralManagerDelegate {
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         self.writeLogEntry(message: "BLE board has been properly connected!")
         self.writeLogEntry(message: "Doing an attempt to discover peripheral's services...")
+        self.targetPeripheral = peripheral
         peripheral.delegate = self
         peripheral.discoverServices([targetServiceUUID])
     }
@@ -100,12 +113,14 @@ extension ViewController : CBCentralManagerDelegate {
         self.writeLogEntry(message: "Failed to connect with \(peripheral)! Error is \(String(describing: error))")
         self.canStartConnect = true
         self.seekingForBoard = false
+        self.canControlLED = false
     }
     
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
         self.writeLogEntry(message: "Peripheral \(peripheral) has been disconnected! Possible reason is \(String(describing: error))")
         self.canStartConnect = true
         self.seekingForBoard = false
+        self.canControlLED = false
     }
 }
 
@@ -131,5 +146,6 @@ extension ViewController : CBPeripheralDelegate {
             }
         }
         self.seekingForBoard = false
+        self.canControlLED = true
     }
 }

@@ -140,7 +140,13 @@
                                             <buttonCell key="cell" type="push" title="LED on" bezelStyle="rounded" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="6dH-4Z-Pjz">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
+                                                <connections>
+                                                    <action selector="onLEDOnClicked:" target="XfG-lQ-9wD" id="fvA-be-t1o"/>
+                                                </connections>
                                             </buttonCell>
+                                            <connections>
+                                                <binding destination="XfG-lQ-9wD" name="enabled" keyPath="self.canControlLED" id="T5f-tn-TYV"/>
+                                            </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xK4-7m-saD">
                                             <rect key="frame" x="14" y="13" width="85" height="32"/>
@@ -148,7 +154,13 @@
                                             <buttonCell key="cell" type="push" title="LED off" bezelStyle="rounded" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="mId-bn-Mng">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
+                                                <connections>
+                                                    <action selector="onLEDOffClicked:" target="XfG-lQ-9wD" id="tfV-fM-ByR"/>
+                                                </connections>
                                             </buttonCell>
+                                            <connections>
+                                                <binding destination="XfG-lQ-9wD" name="enabled" keyPath="self.canControlLED" id="Ffl-fs-CL3"/>
+                                            </connections>
                                         </button>
                                     </subviews>
                                 </view>
@@ -194,12 +206,12 @@
                                 <rect key="frame" x="3" y="231" width="16" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <connections>
-                                    <binding destination="XfG-lQ-9wD" name="animate" keyPath="self.seekingForBoard" id="uP2-iV-wny"/>
                                     <binding destination="XfG-lQ-9wD" name="hidden" keyPath="self.seekingForBoard" id="qb3-AX-Vda">
                                         <dictionary key="options">
                                             <string key="NSValueTransformerName">NSNegateBoolean</string>
                                         </dictionary>
                                     </binding>
+                                    <binding destination="XfG-lQ-9wD" name="animate" keyPath="self.seekingForBoard" id="uP2-iV-wny"/>
                                 </connections>
                             </progressIndicator>
                         </subviews>
