@@ -67,6 +67,10 @@ class ViewController: NSViewController {
         self.writeLogEntry(message: "LED off command is sent!")
         self.targetPeripheral?.writeValue(Data.init(bytes: [0]), for: self.targetCharacteristic!, type: CBCharacteristicWriteType.withoutResponse)
     }
+    
+    @IBAction func onDisconnectFromBoardClicked(_ sender: Any) {
+        self.centralManager?.cancelPeripheralConnection(self.targetPeripheral!)
+    }
 }
 
 extension ViewController : CBCentralManagerDelegate {
@@ -118,7 +122,7 @@ extension ViewController : CBCentralManagerDelegate {
     }
     
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
-        self.writeLogEntry(message: "Peripheral \(peripheral) has been disconnected! Possible reason is \(String(describing: error))")
+        self.writeLogEntry(message: "Peripheral `\(peripheral.name!)` has been disconnected! Possible reason is \(String(describing: error))")
         self.canStartConnect = true
         self.seekingForBoard = false
         self.canControlLED = false
@@ -127,7 +131,7 @@ extension ViewController : CBCentralManagerDelegate {
 
 extension ViewController : CBPeripheralDelegate {
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
-        self.writeLogEntry(message: "The services for \(peripheral) have been discovered!")
+        self.writeLogEntry(message: "The services for `\(peripheral.name!)` have been discovered!")
         for service in peripheral.services! {
             if (service.uuid == targetServiceUUID) {
                 self.writeLogEntry(message: "The target service has been found in the discovered list!")
@@ -138,7 +142,7 @@ extension ViewController : CBPeripheralDelegate {
     }
     
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
-        self.writeLogEntry(message: "The characteristics for \(peripheral) have been discovered!")
+        self.writeLogEntry(message: "The characteristics for `\(peripheral.name!)` have been discovered!")
         for characteristic in service.characteristics! {
             if (characteristic.uuid == targetCharacteristicUUID) {
                 self.writeLogEntry(message: "The target characteristic has been found in the discovered list!")
