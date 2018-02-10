@@ -95,16 +95,17 @@ extension ViewController : CBCentralManagerDelegate {
     }
     
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
-        self.writeLogEntry(message: "The needed target board has been discovered!")
+        self.writeLogEntry(message: "The needed target board has been discovered with a name `\(peripheral.name!)`!")
         self.writeLogEntry(message: "Doing an attempt to connect to it...")
+        self.targetPeripheral = peripheral
+        self.targetPeripheral!.delegate = self
         centralManager?.stopScan()
-        centralManager?.connect(peripheral, options: nil)
+        centralManager?.connect(self.targetPeripheral!, options: nil)
     }
     
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         self.writeLogEntry(message: "BLE board has been properly connected!")
         self.writeLogEntry(message: "Doing an attempt to discover peripheral's services...")
-        self.targetPeripheral = peripheral
         peripheral.delegate = self
         peripheral.discoverServices([targetServiceUUID])
     }
