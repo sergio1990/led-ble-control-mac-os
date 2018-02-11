@@ -52,8 +52,10 @@ class ViewController: NSViewController {
     }
     
     @IBAction func onConnectToBoardClicked(_ sender: Any) {
-        self.canStartConnect = false
-        self.seekingForBoard = true
+        DispatchQueue.main.async {
+            self.canStartConnect = false
+            self.seekingForBoard = true
+        }
         centralManager?.scanForPeripherals(withServices: [targetServiceUUID], options: nil)
         self.writeLogEntry(message: "Started to seek for a target board...")
     }
@@ -87,7 +89,9 @@ extension ViewController : CBCentralManagerDelegate {
             break
         case .poweredOn:
             self.writeLogEntry(message: "BLE discovering is powered on!")
-            self.canStartConnect = true
+            DispatchQueue.main.async {
+                self.canStartConnect = true
+            }
             break
         case .resetting:
             self.writeLogEntry(message: "BLE discovering is resetting!")
@@ -116,16 +120,20 @@ extension ViewController : CBCentralManagerDelegate {
     
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
         self.writeLogEntry(message: "Failed to connect with \(peripheral)! Error is \(String(describing: error))")
-        self.canStartConnect = true
-        self.seekingForBoard = false
-        self.canControlLED = false
+        DispatchQueue.main.async {
+            self.canStartConnect = true
+            self.seekingForBoard = false
+            self.canControlLED = false
+        }
     }
     
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
         self.writeLogEntry(message: "Peripheral `\(peripheral.name!)` has been disconnected! Possible reason is \(String(describing: error))")
-        self.canStartConnect = true
-        self.seekingForBoard = false
-        self.canControlLED = false
+        DispatchQueue.main.async {
+            self.canStartConnect = true
+            self.seekingForBoard = false
+            self.canControlLED = false
+        }
     }
 }
 
@@ -150,7 +158,9 @@ extension ViewController : CBPeripheralDelegate {
                 self.targetCharacteristic = characteristic
             }
         }
-        self.seekingForBoard = false
-        self.canControlLED = true
+        DispatchQueue.main.async {
+            self.seekingForBoard = false
+            self.canControlLED = true
+        }
     }
 }
