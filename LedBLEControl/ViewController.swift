@@ -52,10 +52,8 @@ class ViewController: NSViewController {
     }
     
     @IBAction func onConnectToBoardClicked(_ sender: Any) {
-        DispatchQueue.main.async {
-            self.canStartConnect = false
-            self.seekingForBoard = true
-        }
+        self.canStartConnect = false
+        self.seekingForBoard = true
         centralManager?.scanForPeripherals(withServices: [targetServiceUUID], options: nil)
         self.writeLogEntry(message: "Started to seek for a target board...")
     }
@@ -68,6 +66,13 @@ class ViewController: NSViewController {
     @IBAction func onLEDOffClicked(_ sender: Any) {
         self.writeLogEntry(message: "LED off command is sent!")
         self.targetPeripheral?.writeValue(Data.init(bytes: [0]), for: self.targetCharacteristic!, type: CBCharacteristicWriteType.withoutResponse)
+    }
+    
+    @IBAction func onStopConnectClicked(_ sender: Any) {
+        self.centralManager?.stopScan()
+        self.canStartConnect = true
+        self.seekingForBoard = false
+        self.writeLogEntry(message: "Seeking for the target board has been stopped!")
     }
     
     @IBAction func onDisconnectFromBoardClicked(_ sender: Any) {

@@ -197,20 +197,8 @@
                                     <rect key="frame" x="2" y="2" width="118" height="97"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mvN-gF-hYO">
-                                            <rect key="frame" x="9" y="57" width="100" height="32"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="push" title="Connect" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="pjZ-Lk-31V">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                            </buttonCell>
-                                            <connections>
-                                                <action selector="onConnectToBoardClicked:" target="XfG-lQ-9wD" id="ywt-yg-fAh"/>
-                                                <binding destination="XfG-lQ-9wD" name="enabled" keyPath="self.canStartConnect" id="nn7-eP-ety"/>
-                                            </connections>
-                                        </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5ps-RL-Bgg">
-                                            <rect key="frame" x="9" y="24" width="100" height="32"/>
+                                            <rect key="frame" x="9" y="1" width="100" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="push" title="Disconnect" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="sSH-vX-tPE">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -221,8 +209,32 @@
                                                 <binding destination="XfG-lQ-9wD" name="enabled" keyPath="self.canControlLED" id="XAa-ZV-3g9"/>
                                             </connections>
                                         </button>
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Llp-Sz-3Xf">
+                                            <rect key="frame" x="9" y="31" width="100" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="push" title="Stop" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="FtR-W9-uWz">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="onStopConnectClicked:" target="XfG-lQ-9wD" id="odE-lA-GbU"/>
+                                                <binding destination="XfG-lQ-9wD" name="enabled" keyPath="self.seekingForBoard" id="Z9s-zx-qRU"/>
+                                            </connections>
+                                        </button>
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mvN-gF-hYO">
+                                            <rect key="frame" x="9" y="60" width="100" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="push" title="Connect" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="pjZ-Lk-31V">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="onConnectToBoardClicked:" target="XfG-lQ-9wD" id="ywt-yg-fAh"/>
+                                                <binding destination="XfG-lQ-9wD" name="enabled" keyPath="self.canStartConnect" id="nn7-eP-ety"/>
+                                            </connections>
+                                        </button>
                                         <progressIndicator hidden="YES" wantsLayer="YES" fixedFrame="YES" maxValue="100" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="qhh-UD-Tux">
-                                            <rect key="frame" x="0.0" y="66" width="16" height="16"/>
+                                            <rect key="frame" x="0.0" y="69" width="16" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <connections>
                                                 <binding destination="XfG-lQ-9wD" name="hidden" keyPath="self.seekingForBoard" id="qb3-AX-Vda">
