@@ -84,6 +84,11 @@ extension ViewController : CBCentralManagerDelegate {
         switch (central.state) {
         case .poweredOff:
             self.writeLogEntry(message: "BLE discovering is powered off!")
+            DispatchQueue.main.async {
+                self.canStartConnect = false
+                self.seekingForBoard = false
+                self.centralManager?.stopScan()
+            }
             break
         case .unauthorized:
             self.writeLogEntry(message: "BLE discovering is unauthorized!")
