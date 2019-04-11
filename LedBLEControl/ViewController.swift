@@ -83,6 +83,11 @@ class ViewController: NSViewController {
     @IBAction func onDisconnectFromBoardClicked(_ sender: Any) {
         self.centralManager?.cancelPeripheralConnection(self.targetPeripheral!)
     }
+    
+    @IBAction func onSendBytesClicked(_ sender: Any) {
+        self.writeLogEntry(message: "[26, 4, 127, 240, 100, 8] bytes sequence is sent!")
+        self.targetPeripheral?.writeValue(Data.init(bytes: [26, 4, 127, 240, 100, 8]), for: self.targetCharacteristic!, type: CBCharacteristicWriteType.withoutResponse)
+    }
 }
 
 extension ViewController : CBCentralManagerDelegate {
