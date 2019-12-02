@@ -65,12 +65,12 @@ class ViewController: NSViewController {
     
     @IBAction func onLEDOnClicked(_ sender: Any) {
         self.writeLogEntry(message: "LED on command is sent!")
-        self.targetPeripheral?.writeValue(Data.init(bytes: [1]), for: self.targetCharacteristic!, type: CBCharacteristicWriteType.withoutResponse)
+        self.targetPeripheral?.writeValue(Data.init([1]), for: self.targetCharacteristic!, type: CBCharacteristicWriteType.withoutResponse)
     }
     
     @IBAction func onLEDOffClicked(_ sender: Any) {
         self.writeLogEntry(message: "LED off command is sent!")
-        self.targetPeripheral?.writeValue(Data.init(bytes: [0]), for: self.targetCharacteristic!, type: CBCharacteristicWriteType.withoutResponse)
+        self.targetPeripheral?.writeValue(Data.init([0]), for: self.targetCharacteristic!, type: CBCharacteristicWriteType.withoutResponse)
     }
     
     @IBAction func onStopConnectClicked(_ sender: Any) {
@@ -86,7 +86,7 @@ class ViewController: NSViewController {
     
     @IBAction func onSendBytesClicked(_ sender: Any) {
         self.writeLogEntry(message: "[26, 4, 127, 240, 100, 8] bytes sequence is sent!")
-        self.targetPeripheral?.writeValue(Data.init(bytes: [26, 4, 127, 240, 100, 8]), for: self.targetCharacteristic!, type: CBCharacteristicWriteType.withoutResponse)
+        self.targetPeripheral?.writeValue(Data.init([26, 4, 127, 240, 100, 8]), for: self.targetCharacteristic!, type: CBCharacteristicWriteType.withoutResponse)
     }
 }
 
@@ -119,6 +119,8 @@ extension ViewController : CBCentralManagerDelegate {
         case .unsupported:
             self.writeLogEntry(message: "BLE discovering is unsupported!")
             break
+        @unknown default:
+            self.writeLogEntry(message: "Doesn't know how to tackle with the BLE state \(central.state)")
         }
     }
     
