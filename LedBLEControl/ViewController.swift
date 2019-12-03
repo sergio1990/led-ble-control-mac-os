@@ -18,6 +18,7 @@ class ViewController: NSViewController {
     fileprivate var targetCharacteristic: CBCharacteristic?
     fileprivate var targetPeripheral: CBPeripheral?
     @IBOutlet var logsTextView: NSTextView!
+    @IBOutlet weak var customBytesTextField: NSTextFieldCell!
     @objc dynamic var canStartConnect: Bool = false
     @objc dynamic var seekingForBoard: Bool = false
     @objc dynamic var canControlLED: Bool = false
@@ -34,7 +35,7 @@ class ViewController: NSViewController {
     }
     
     func startCentralManager() {
-        let centralQueue = DispatchQueue(label: "com.wearebrain.LedBLEControlQueue", attributes: [])
+        let centralQueue = DispatchQueue(label: "com.sergiogernyak.LedBLEControlQueue", attributes: [])
         centralManager = CBCentralManager(delegate: self, queue: centralQueue)
     }
     
@@ -87,6 +88,11 @@ class ViewController: NSViewController {
     @IBAction func onSendBytesClicked(_ sender: Any) {
         self.writeLogEntry(message: "[26, 4, 127, 240, 100, 8] bytes sequence is sent!")
         self.targetPeripheral?.writeValue(Data.init([26, 4, 127, 240, 100, 8]), for: self.targetCharacteristic!, type: CBCharacteristicWriteType.withoutResponse)
+    }
+    
+    @IBAction func onSendCustomBytesClick(_ sender: Any) {
+        let customBytesString = self.customBytesTextField.stringValue
+        self.writeLogEntry(message: "onSendCustomBytesClick is called! The custom bytes are \(customBytesString)")
     }
 }
 
