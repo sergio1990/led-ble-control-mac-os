@@ -93,6 +93,17 @@ class ViewController: NSViewController {
     @IBAction func onSendCustomBytesClick(_ sender: Any) {
         let customBytesString = self.customBytesTextField.stringValue
         self.writeLogEntry(message: "onSendCustomBytesClick is called! The custom bytes are \(customBytesString)")
+        let messageBytes = customBytesString
+            .split(separator: " ")
+            .map({ (byteString) -> UInt8 in
+                let result = UInt8(byteString, radix: 16)
+                if result != nil {
+                    return result!
+                } else {
+                    return 0
+                }
+            })
+        self.targetPeripheral?.writeValue(Data.init(messageBytes), for: self.targetCharacteristic!, type: CBCharacteristicWriteType.withoutResponse)
     }
 }
 
